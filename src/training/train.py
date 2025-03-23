@@ -1,3 +1,5 @@
+import os
+import pickle
 from transformers import TrainingArguments, Trainer
 from src.models.models import model, tokenizer, tokenized_datasets
 
@@ -12,3 +14,15 @@ trainer = Trainer(
     eval_dataset=tokenized_datasets["validation"], tokenizer=tokenizer
 )
 trainer.train()
+
+# Define the model save path
+model_save_path = "Ner_project/src/models/ner_model.pkl"
+
+# Ensure directory exists
+os.makedirs(os.path.dirname(model_save_path), exist_ok=True)
+
+# Save the trained model
+with open(model_save_path, "wb") as f:
+    pickle.dump(model, f)
+
+print(f"Model saved successfully at: {model_save_path}")
