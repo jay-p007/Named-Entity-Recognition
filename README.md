@@ -84,7 +84,6 @@ pip install -r requirements.txt
   - Hyperparameters optimized: `learning_rate=2e-5`, `num_train_epochs=3`, `batch_size=16`.
   - Models saved after each epoch.
 
-
 ## 🎯 Model Training & Evaluation
 
 The model is fine-tuned using `xlm-roberta-large-finetuned-conll03-english`.
@@ -109,7 +108,6 @@ TrainOutput(global_step=2634, training_loss=0.017399892893629736, metrics={
     'epoch': 3.0
 })
 ```
-
 
 ---
 
@@ -163,12 +161,18 @@ print(response.json())
 ### Steps to Deploy FastAPI on Render:
 
 1️⃣ Push your FastAPI app to a public GitHub repository.
+
 2️⃣ Go to **[Render](https://render.com/)** and create a new Web Service.
+
 3️⃣ Select your GitHub repository and set the **Start Command**:
+
+
 
 ```sh
 uvicorn src.api.app:app --host 0.0.0.0 --port $PORT
 ```
+
+
 
 4️⃣ Deploy and obtain the public API URL.
 
