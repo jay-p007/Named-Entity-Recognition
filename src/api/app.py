@@ -3,7 +3,6 @@ from pydantic import BaseModel
 from transformers import pipeline
 import torch
 import os
-import uvicorn
 from transformers import AutoModelForTokenClassification, AutoTokenizer
 
 # Define model paths
@@ -63,8 +62,3 @@ def predict_entities(input_text: TextInput):
             entity["entity_group"] = entity_label  # Keep original if ID extraction fails
 
     return {"entities": entities}
-
-# Run the FastAPI app with Uvicorn server
-if __name__ == "__main__":
-    port = int(os.getenv("PORT", 10000))  # Get port from environment variable
-    uvicorn.run(app, host="0.0.0.0", port=port)
