@@ -66,24 +66,73 @@ TrainOutput(global_step=2634, training_loss=0.017399892893629736, metrics={
 
 ### API Usage Guide:
 
-- **Endpoint**: `/predict/`
-- **Request Format**:
-  ```json
-  {
-    "text": "Google was founded by Larry Page and Sergey Brin in California."
-  }
-  ```
-- **Response Format**:
-  ```json
-  {
-    "entities": [
-      { "word": "Google", "entity_group": "ORG", "score": 1.00 },
-      { "word": "Larry Page", "entity_group": "PER", "score": 1.00 },
-      { "word": "Sergey Brin", "entity_group": "PER", "score": 1.00 },
-      { "word": "California", "entity_group": "LOC", "score": 1.00 }
-    ]
-  }
-  ```
+#### 1. Running FastAPI Locally
+
+To run your FastAPI server locally, use the following command:
+
+```sh
+uvicorn src.api.app:app --host 0.0.0.0 --port 8000
+```
+
+This will start the server at **[http://127.0.0.1:8000](http://127.0.0.1:8000)**.
 
 ---
+
+#### 2. Running Streamlit UI Locally
+
+To create and run the Streamlit-based frontend, use the following command:
+
+```sh
+streamlit run src/frontend/streamlit_app.py
+```
+
+This will launch the UI in your web browser for interacting with the NER API.
+
+---
+
+#### 3. API Request Example
+
+Once your FastAPI server is running, you can make a request using Python:
+
+```python
+import requests
+
+url = "http://127.0.0.1:8000/predict/"
+data = {"text": "Google was founded by Larry Page and Sergey Brin in California."}
+
+response = requests.post(url, json=data)
+print(response.json())
+```
+
+---
+
+#### 4. Expected API Response Format
+
+```json
+{
+  "entities": [
+    { "word": "Google", "entity_group": "ORG", "score": 1.00 },
+    { "word": "Larry Page", "entity_group": "PER", "score": 1.00 },
+    { "word": "Sergey Brin", "entity_group": "PER", "score": 1.00 },
+    { "word": "California", "entity_group": "LOC", "score": 1.00 }
+  ]
+}
+```
+
+---
+
+#### 5. Deployment on Render
+
+##### Steps for Deploying FastAPI on Render:
+
+1. Push your FastAPI app to a public GitHub repository.
+2. Go to **[Render](https://render.com/)** and create a new Web Service.
+3. Select your GitHub repository and set the **Start Command**:
+   ```sh
+   uvicorn src.api.app:app --host 0.0.0.0 --port 8000
+   ```
+4. Deploy and get the public API URL.
+
+
+
 
