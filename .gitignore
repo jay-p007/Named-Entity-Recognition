@@ -1,3 +1,7 @@
 echo "ner/Lib/" >> .gitignore
 echo "venv/" >> .gitignore
 echo "__pycache__/" >> .gitignore
+ner/Lib/
+venv/
+__pycache__/
+*.pyc

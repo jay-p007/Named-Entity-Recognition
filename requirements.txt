@@ -1,0 +1,15 @@
+torch==2.6.0
+transformers==4.49.0
+spacy==3.8.4
+fastapi==0.115.11
+uvicorn==0.34.0
+datasets==3.4.1
+seqeval==1.2.2
+docker==7.1.0
+scikit-learn==1.6.1
+joblib==1.4.2
+pydantic==2.10.6
+accelerate==1.5.2
+evaluate==0.4.3
+streamlit==1.43.2
+requests==2.32.3
