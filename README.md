@@ -1,3 +1,62 @@
+# Named Entity Recognition (NER) API
+
+NER API is an AI-powered Named Entity Recognition (NER) system that enables users to extract named entities from text using a fine-tuned `xlm-roberta-large` model. The project includes a FastAPI-based backend, a Streamlit UI, and cloud deployment on Render.
+
+---
+
+## 📌 Features
+
+✅ **Named Entity Recognition** for text input.
+
+✅ **Pre-trained Transformer Model fine-tuned** on conll03-english dataset.
+
+✅ **FastAPI-based API** for serving predictions.
+
+✅ **Interactive UI** with Streamlit.
+
+✅ **Dockerized Deployment** for cloud hosting.
+
+---
+
+## 🛠 Prerequisites
+
+Before running the project, ensure you have the following installed:
+
+- Python 3.10+
+- pip (Python package manager)
+- Git (optional, for cloning the repository)
+- Docker (optional, for containerization)
+
+---
+
+## 🚀 Installation & Setup
+
+### 1️⃣ Clone the Repository
+
+```sh
+git clone https://github.com/jay-p007/Named-Entity-Recognition.git
+cd Named-Entity-Recognition
+```
+
+### 2️⃣ Create and Activate a Virtual Environment
+
+```sh
+# On Windows
+python -m venv venv
+venv\Scripts\activate
+
+# On Mac/Linux
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3️⃣ Install Dependencies
+
+```sh
+pip install -r requirements.txt
+```
+
+---
 
 ## 1. Data Preprocessing & Feature Engineering
 
@@ -25,9 +84,14 @@
   - Hyperparameters optimized: `learning_rate=2e-5`, `num_train_epochs=3`, `batch_size=16`.
   - Models saved after each epoch.
 
-### Training & Evaluation Metrics:
 
-| Epoch | Training Loss | Validation Loss | Precision | Recall   | F1       | Accuracy |
+## 🎯 Model Training & Evaluation
+
+The model is fine-tuned using `xlm-roberta-large-finetuned-conll03-english`.
+
+### 📊 Training & Evaluation Metrics:
+
+| Epoch | Training Loss | Validation Loss | Precision | Recall   | F1 Score | Accuracy |
 | ----- | ------------- | --------------- | --------- | -------- | -------- | -------- |
 | 1     | 0.007900      | 0.055435        | 0.954934  | 0.960404 | 0.957661 | 0.991914 |
 | 2     | 0.001000      | 0.047132        | 0.956943  | 0.966133 | 0.961516 | 0.993103 |
@@ -46,53 +110,28 @@ TrainOutput(global_step=2634, training_loss=0.017399892893629736, metrics={
 })
 ```
 
+
 ---
 
-## 3. Deployment Strategy & API Usage Guide
+## 🌐 API Usage Guide
 
-### Deployment Steps:
-
-- **Model Export**: The trained model was saved locally (`ner_model`) and remotely (`Jay-007/Ner_model` on Hugging Face Hub).
-- **FastAPI-based API**:
-  - Implemented an API using FastAPI for serving predictions.
-  - Loaded the trained model dynamically.
-  - Used `pipeline` for NER inference.
-- **Streamlit Frontend**:
-  - Developed a simple UI with Streamlit for interactive entity recognition.
-  - Integrated frontend with FastAPI backend for real-time predictions.
-- **Dockerization & Cloud Deployment**:
-  - Packaged the application into a Docker container.
-  - Deployed on Render for scalable API hosting.
-
-### API Usage Guide:
-
-#### 1. Running FastAPI Locally
-
-To run your FastAPI server locally, use the following command:
+### 1️⃣ Running FastAPI Locally
 
 ```sh
 uvicorn src.api.app:app --host 0.0.0.0 --port 8000
 ```
 
-This will start the server at **[http://127.0.0.1:8000](http://127.0.0.1:8000)**.
+This starts the API at **[http://127.0.0.1:8000](http://127.0.0.1:8000)**.
 
----
-
-#### 2. Running Streamlit UI Locally
-
-To create and run the Streamlit-based frontend, use the following command:
+### 2️⃣ Running Streamlit UI Locally
 
 ```sh
 streamlit run src/frontend/streamlit_app.py
 ```
 
-This will launch the UI in your web browser for interacting with the NER API.
+This launches the UI in a web browser for interactive entity recognition.
 
----
-
-#### 3. API Request Example
-
-Once your FastAPI server is running, you can make a request using Python:
+### 3️⃣ API Request Example (Using Python)
 
 ```python
 import requests
@@ -104,9 +143,7 @@ response = requests.post(url, json=data)
 print(response.json())
 ```
 
----
-
-#### 4. Expected API Response Format
+### 4️⃣ Expected API Response Format
 
 ```json
 {
@@ -121,18 +158,55 @@ print(response.json())
 
 ---
 
-#### 5. Deployment on Render
+## 🚀 Deployment on Render
 
-##### Steps for Deploying FastAPI on Render:
+### Steps to Deploy FastAPI on Render:
 
-1. Push your FastAPI app to a public GitHub repository.
-2. Go to **[Render](https://render.com/)** and create a new Web Service.
-3. Select your GitHub repository and set the **Start Command**:
-   ```sh
-   uvicorn src.api.app:app --host 0.0.0.0 --port 8000
-   ```
-4. Deploy and get the public API URL.
+1️⃣ Push your FastAPI app to a public GitHub repository.
+2️⃣ Go to **[Render](https://render.com/)** and create a new Web Service.
+3️⃣ Select your GitHub repository and set the **Start Command**:
 
+```sh
+uvicorn src.api.app:app --host 0.0.0.0 --port $PORT
+```
 
+4️⃣ Deploy and obtain the public API URL.
 
+---
+
+## 📂 Project Structure
+
+```sh
+Named-Entity-Recognition/
+│-- src/
+│   ├── data/
+│   │   ├── dataset_loader.py  # Dataset loading script
+│   │   ├── processing.py  # Data preprocessing
+│   ├── api/
+│   │   ├── app.py  # FastAPI Application  
+│   ├── frontend/
+│   │   ├── streamlit_app.py  # Streamlit UI
+│   ├── models/
+│   │   ├── loss_functions.py  # Custom Loss Functions
+│   │   ├── models.py  # Model Loading
+│   ├── training/
+│   │   ├── train.py  # Training Script
+│-- requirements.txt  # Dependencies
+│-- Dockerfile  # Containerization
+│-- README.md  # Documentation
+```
+
+---
+
+## 📌 License
+
+This project is open-source and available under the MIT License.
+
+---
+
+## 👨‍💻 Contributing
+
+Contributions are welcome! Feel free to open an issue or submit a pull request.
+
+Enjoy using the NER API! 🚀🎉
 
