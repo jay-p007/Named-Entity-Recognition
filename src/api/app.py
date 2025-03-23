@@ -66,5 +66,5 @@ def predict_entities(input_text: TextInput):
 
 # Run the FastAPI app with Uvicorn server
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))  # Get port from environment variable
+    port = int(os.getenv("PORT", 10000))  # Get port from environment variable
     uvicorn.run(app, host="0.0.0.0", port=port)
