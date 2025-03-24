@@ -1,64 +1,41 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from transformers import pipeline
+from transformers import pipeline, AutoModelForTokenClassification, AutoTokenizer
 import torch
 import os
-from transformers import AutoModelForTokenClassification, AutoTokenizer
 
-# Define model paths
-LOCAL_MODEL_PATH = "Ner_project/src/training/ner_model"
-REMOTE_MODEL_PATH = "Jay-007/Ner_model"
+# Initialize FastAPI app
+app = FastAPI()
 
-# Check if the local model path exists
-if os.path.exists(LOCAL_MODEL_PATH):
-    MODEL_PATH = LOCAL_MODEL_PATH
-else:
-    MODEL_PATH = REMOTE_MODEL_PATH
-
+# Model loading code remains the same
+MODEL_PATH = "Jay-007/Ner_model"  # Use remote model path directly
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Load model and tokenizer
 try:
     model = AutoModelForTokenClassification.from_pretrained(MODEL_PATH, torch_dtype=torch.float32).to(device)
     tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
-    print("✅ Model and tokenizer loaded successfully!")
+    ner_pipeline = pipeline("ner", model=model, tokenizer=tokenizer, 
+                          aggregation_strategy="simple",
+                          device=0 if torch.cuda.is_available() else -1)
 except Exception as e:
-    print(f"❌ Error loading model: {e}")
-    model, tokenizer = None, None
-
-# Define NER pipeline
-if model and tokenizer:
-    ner_pipeline = pipeline("ner", model=model, tokenizer=tokenizer, aggregation_strategy="simple", device=0 if torch.cuda.is_available() else -1)
-else:
-    ner_pipeline = None
-
-# Initialize FastAPI app
-app = FastAPI(title="NER API", description="Named Entity Recognition with Fine-tuned XLM-RoBERTa", version="1.0")
+    print(f"Error loading model: {e}")
+    model, tokenizer, ner_pipeline = None, None, None
 
 class TextInput(BaseModel):
     text: str
 
 @app.post("/predict/")
-def predict_entities(input_text: TextInput):
-    if ner_pipeline is None:
-        return {"error": "Model not loaded. Check logs for details."}
+async def predict_entities(input_text: TextInput):
+    if not ner_pipeline:
+        return {"error": "Model not loaded"}
+        
+    try:
+        entities = ner_pipeline(input_text.text)
+        return {"entities": entities}
+    except Exception as e:
+        return {"error": str(e)}
 
-    text = input_text.text
-    entities = ner_pipeline(text)
-
-    print(entities)  # Debugging: Check entity output format
-
-    # Convert model labels to meaningful names using model.config.id2label
-    for entity in entities:
-        entity["score"] = float(entity["score"])
-        entity_label = entity["entity_group"]  # ✅ Use "entity_group" instead of "entity"
-
-        # Get label from model.config.id2label, if available
-        entity_id = entity_label.split("_")[-1]  # Extract ID from label (e.g., "LABEL_3" -> "3")
-        try:
-            entity_id = int(entity_id)
-            entity["entity_group"] = model.config.id2label.get(entity_id, entity_label)
-        except ValueError:
-            entity["entity_group"] = entity_label  # Keep original if ID extraction fails
-
-    return {"entities": entities}
+# Health check endpoint
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
