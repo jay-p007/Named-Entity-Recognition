@@ -7,8 +7,11 @@ import os
 # Initialize FastAPI app
 app = FastAPI()
 
-# Model loading code remains the same
-MODEL_PATH = "Jay-007/Ner_model"  # Use remote model path directly
+# Get port from environment variable with default
+port = int(os.environ.get("PORT", 10000))
+
+# Model loading code
+MODEL_PATH = "Jay-007/Ner_model"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 try:
@@ -39,3 +42,7 @@ async def predict_entities(input_text: TextInput):
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=port)
