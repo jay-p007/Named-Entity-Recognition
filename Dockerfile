@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 10000
 
 # Run the application
-CMD ["uvicorn", "src.api.app:app", "--host", "0.0.0.0", "--port", "10000"]
+CMD ["uvicorn", "src.api.app:app", "--host", "0.0.0.0", "--port", "10000", "--reload"]
