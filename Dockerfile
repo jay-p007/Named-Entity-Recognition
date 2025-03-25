@@ -6,12 +6,7 @@ WORKDIR /app
 
 # Copy requirements file
 COPY requirements.txt .
-
-# Copy the pre-downloaded wheels directory
-COPY wheels /wheels
-
-# Install dependencies from local wheels first, then install other dependencies
-RUN pip install --no-cache-dir /wheels/* && pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code
 COPY . .
