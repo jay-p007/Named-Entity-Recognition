@@ -38,6 +38,10 @@ app = FastAPI(title="NER API", description="Named Entity Recognition with Fine-t
 class TextInput(BaseModel):
     text: str
 
+@app.get("/")
+async def root():
+    return {"message": "NER API is running. Use /predict/ to make predictions."}
+
 @app.post("/predict/")
 def predict_entities(input_text: TextInput):
     if ner_pipeline is None:
