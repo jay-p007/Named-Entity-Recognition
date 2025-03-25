@@ -2,6 +2,4 @@ services:
   - type: web
     name: ner-api
     runtime: docker
-    repo: https://github.com/jay-p007/Named-Entity-Recognition
-    buildCommand: docker build .
-    startCommand: uvicorn src.api.app:app --host 0.0.0.0 --port 10000
+    dockerCommand: uvicorn src.api.app:app --host 0.0.0.0 --port 10000
