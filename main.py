@@ -5,7 +5,7 @@ import streamlit as st
 import requests
 
 # Start FastAPI server in the background
-FASTAPI_PORT = 8000
+FASTAPI_PORT = 10000
 
 def start_fastapi():
     """ Start FastAPI if not already running """
