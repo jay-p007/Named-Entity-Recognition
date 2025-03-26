@@ -42,7 +42,7 @@ class TextInput(BaseModel):
 async def root():
     return {"message": "NER API is running. Use /predict/ to make predictions."}
 
-@app.post("/predict/")
+@app.post("/predict")
 def predict_entities(input_text: TextInput):
     if ner_pipeline is None:
         return {"error": "Model not loaded. Check logs for details."}
