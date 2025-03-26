@@ -52,3 +52,9 @@ if st.button("Analyze"):
                 st.error(f"Failed to connect to the API: {e}")
     else:
         st.warning("Please enter some text.")
+
+
+# Add this to tell Streamlit to use the correct port
+if __name__ == "__main__":
+    st.server.port = PORT
+    st.server.address = "0.0.0.0"
