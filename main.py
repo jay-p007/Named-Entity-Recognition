@@ -17,7 +17,7 @@ def start_fastapi():
     except requests.exceptions.ConnectionError:
         print("⚡ Starting FastAPI...")
         subprocess.Popen(
-            ["uvicorn", "src.api.app:app", "--host", "0.0.0.0", "--port", str(FASTAPI_PORT)],
+            ["uvicorn", "src.api.app:app", "--host", "0.0.0.0", "--port", str(FASTAPI_PORT), "--reload"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
