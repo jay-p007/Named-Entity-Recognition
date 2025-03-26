@@ -4,29 +4,29 @@ import os
 import streamlit as st
 import requests
 
-# Start FastAPI server in the background
-FASTAPI_PORT = 10000
+# Use Render's PORT environment variable
+PORT = int(os.environ.get("PORT", 10000))
+FASTAPI_PORT = PORT
 
 def start_fastapi():
-    """ Start FastAPI if not already running """
     try:
-        response = requests.get(f"http://127.0.0.1:{FASTAPI_PORT}/")
+        response = requests.get(f"http://0.0.0.0:{FASTAPI_PORT}/")
         if response.status_code == 200:
             print("✅ FastAPI is already running.")
             return
     except requests.exceptions.ConnectionError:
         print("⚡ Starting FastAPI...")
         subprocess.Popen(
-            ["uvicorn", "src.api.app:app", "--host", "0.0.0.0", "--port", str(FASTAPI_PORT), "--reload"],
+            ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", str(FASTAPI_PORT)],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
-        time.sleep(3)  # Give FastAPI time to start
+        time.sleep(3)
 
 start_fastapi()
 
-# FastAPI endpoint
-API_URL = f"http://127.0.0.1:{FASTAPI_PORT}/predict/"
+# Update API URL to use 0.0.0.0
+API_URL = f"http://0.0.0.0:{FASTAPI_PORT}/predict/"
 
 st.title("Named Entity Recognition (NER) App 🚀")
 st.markdown("Enter text below, and the model will identify named entities!")
